@@ -8,7 +8,7 @@
  * @author ivans
  *
  */
-public class Pokemon {
+public abstract class Pokemon {
 	
 	protected String nombre;
 	protected int saludActual;
@@ -19,6 +19,8 @@ public class Pokemon {
 	protected int nivelMax;
 	protected double peso;
 	protected double altura;
+	protected int poderAtaque;
+	protected int poderDefensa;
 	
 	/**
 	 * Este es el constructor completo del pokemon
@@ -31,9 +33,11 @@ public class Pokemon {
 	 * @param nivelMax : Maximon nivel al que puede llegar el pokemon
 	 * @param peso : Peso duh!
 	 * @param altura : Altura duh>
+	 * @param poderAtaque: El poder maximo con el que este pokemon puede atacar
+	 * @param poderDefensa: El poder maximo con el que este pokemon se puede defender
 	 */
 	public Pokemon(String nombre, int saludActual, int saludMax, int nivel, int nivelEvolucion, Pokemon evolucion,
-			int nivelMax, double peso, double altura) {
+			int nivelMax, double peso, double altura, int poderAtaque, int poderDefensa) {
 		super();
 		this.nombre = nombre;
 		this.saludActual = saludActual;
@@ -44,6 +48,8 @@ public class Pokemon {
 		this.nivelMax = nivelMax;
 		this.peso = peso;
 		this.altura = altura;
+		this.poderAtaque = poderAtaque;
+		this.poderDefensa = poderDefensa;
 	}
 
 	public String getNombre() {
@@ -60,6 +66,11 @@ public class Pokemon {
 
 	public void setSaludActual(int saludActual) {
 		this.saludActual = saludActual;
+		if(saludActual<=0)
+		{
+			System.out.println("RIP: " + this.getNombre() + " ha muerto. " + 
+					"Buen trabajo, eres un entrenador pesimo!");
+		}
 	}
 
 	public int getSaludMax() {
@@ -118,11 +129,47 @@ public class Pokemon {
 		this.altura = altura;
 	}
 
-	@Override
-	public String toString() {
-		return "Pokemon [nombre=" + nombre + ", saludActual=" + saludActual + ", saludMax=" + saludMax + ", nivel="
-				+ nivel + ", nivelEvolucion=" + nivelEvolucion + ", peso=" + peso + ", altura=" + altura + "]";
+	public int getPoderAtaque() {
+		return poderAtaque;
+	}
+
+	public void setPoderAtaque(int poderAtaque) {
+		this.poderAtaque = poderAtaque;
 	}
 	
+	public int getPoderDefensa() {
+		return poderDefensa;
+	}
+
+	public void setPoderDefensa(int poderDefensa) {
+		this.poderDefensa = poderDefensa;
+	}
+
+	@Override
+	public String toString() {
+		return "Pokemon [nombre=" + nombre + ", poderAtaque= " + poderAtaque + ", saludActual=" + saludActual + ", saludMax=" + saludMax + ", nivel="
+				+ nivel + ", nivelEvolucion=" + nivelEvolucion + ", peso=" + peso + ", altura=" + altura +
+				", poderDefensa" + poderDefensa + "]";
+	}
 	
+	public void evolucionar(){
+		if(this.nivel>=this.nivelEvolucion && this.evolucion!=null)
+		{
+			this.nombre=evolucion.getNombre();
+			this.altura = evolucion.getAltura();
+			this.nivelEvolucion = evolucion.getNivelEvolucion();
+			this.saludActual = evolucion.getSaludMax();
+			this.saludMax = evolucion.getSaludMax();
+			this.evolucion = evolucion.getEvolucion();
+			this.peso = evolucion.getPeso();
+			this.poderAtaque = evolucion.getPoderAtaque();
+			this.poderDefensa = evolucion.getPoderDefensa();
+		}else{
+			System.out.println("Pokemon no listo para evolucion, entrenalo mas!");
+		}
+	}
+	
+	public abstract int atacar(Pokemon otroPokemon);
+	
+	public abstract int defenderse();
 }
