@@ -20,4 +20,12 @@ public class PokemonElectrico extends Pokemon {
 		return 0;
 	}
 
+	@Override
+	public String dibujar() {
+		String pokemonADibujar = "Mi Pokemon Electrico";
+		
+		System.out.println(pokemonADibujar);
+		return pokemonADibujar;
+	}
+
 }

@@ -55,4 +55,12 @@ public class PokemonFuego extends Pokemon {
 		return poderDefensa;
 	}
 
+	@Override
+	public String dibujar() {
+		String pokemonADibujar = "Mi Pokemon Fuego";
+		
+		System.out.println(pokemonADibujar);
+		return pokemonADibujar;
+	}
+
 }

@@ -1,3 +1,15 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+
+import javax.activation.FileDataSource;
 
 /**
  * Esta clase se trata de un Pokemon base
@@ -8,7 +20,7 @@
  * @author ivans
  *
  */
-public abstract class Pokemon {
+public abstract class Pokemon implements GraficosJuego{
 	
 	protected String nombre;
 	protected int saludActual;
@@ -21,6 +33,7 @@ public abstract class Pokemon {
 	protected double altura;
 	protected int poderAtaque;
 	protected int poderDefensa;
+	protected String nombreArchivo;
 	
 	/**
 	 * Este es el constructor completo del pokemon
@@ -172,4 +185,82 @@ public abstract class Pokemon {
 	public abstract int atacar(Pokemon otroPokemon);
 	
 	public abstract int defenderse();
+	
+	public void leerPokemonArchivo()
+	{
+		File archivoALeer = new File(this.nombreArchivo);
+		try {
+			FileReader lectorDeArchivo = new FileReader(archivoALeer);
+			BufferedReader bfr = new BufferedReader(lectorDeArchivo);
+			
+			String lineaLeida;
+			System.out.println("Comienza lectura del archivo");
+			while((lineaLeida = bfr.readLine())!=null)
+			{
+				System.out.println(lineaLeida);
+				/*
+				String[] palabras = lineaLeida.split(" ");
+				System.out.println("Las palabras son:");
+				for(String p: palabras)
+				{
+					System.out.println(p);
+				}*/
+			}
+			bfr.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			System.err.println("Archivo no encontrado.");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public boolean borrarArchivoPokemon()
+	{
+		String nombreArchivo = this.nombreArchivo;
+		File manipuladorArchivos = new File(nombreArchivo);
+		
+
+		if(manipuladorArchivos.delete())
+		{
+			System.out.println("Archivo borrado correctamente");
+			return true;
+		}else{
+			System.out.println("No se logro borrar el archivo previa escritura");
+			return false;
+		}
+	}
+	
+	public void escribirPokemonArchivo() {
+		this.nombreArchivo = this.nombre + LocalDate.now().toString();
+		Path path = Paths.get("D:\\Users\\ivan\\Documents\\UPSE\\prueba.txt");
+		File manipuladorArchivos = new File(path.toUri());
+
+		try {
+			if (!manipuladorArchivos.exists()) {
+				System.out.println("El archivo existe.");
+			} else {
+				manipuladorArchivos.createNewFile();
+				System.out.println("Creado el nuevo archivo.");
+
+				FileWriter escritorDeArchivo = new FileWriter(manipuladorArchivos);
+				BufferedWriter bfw = new BufferedWriter(escritorDeArchivo);
+				bfw.write(this.toString());
+				bfw.newLine();
+				bfw.write(this.dibujar());
+				bfw.newLine();
+				bfw.write("Si te sale esto por printout, te puedes ir a tu casa. Sino salao!");
+				bfw.close();
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+
+		}
+	}
 }
